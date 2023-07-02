@@ -14,6 +14,7 @@ const Room = () => {
 	var room = state.room;
 	React.useEffect(() => {
 		socket.emit('join', state);
+		socket.emit('get_rooms', '');
 	}, [state]);
 	React.useEffect(() => {
 		socket.on('message', (message) => {
@@ -22,6 +23,9 @@ const Room = () => {
 		socket.on('server_stats', (servers) => {
 			console.log('Rooms', servers);
 		});
+		// socket.on('rooms_list', (data) => {
+		// 	console.log('Data', data);
+		// });
 		// socket.on('connection', (e) => {
 		// 	console.log(e);
 		// });

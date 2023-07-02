@@ -7,7 +7,8 @@ const server = http.createServer(app);
 const cors = require('cors');
 const { Server } = require('socket.io');
 const createRooms = require('./utils/rooms/room');
-
+const serialz = require('./utils/serialz');
+const rooms = require('./utils/rooms/room');
 const port = process.env.PORT || 5000;
 
 const io = new Server(server, {
@@ -24,10 +25,8 @@ app.use(
 		origin: '*',
 	})
 );
-
 io.on('connect', async (socket) => {
-	const sockets = await io.fetchSockets(socket);
-	const req = socket.request;
+	// console.log(io.adapter.allRooms((err, rooms) => rooms));
 	socket.on('join', ({ username, room }) => {
 		socket.join(room);
 		socket.emit('message', {
@@ -39,13 +38,29 @@ io.on('connect', async (socket) => {
 		});
 		socket.emit('server_stats', {
 			userId: socket.id,
-			rooms: username,
-			sids: sockets[0].rooms,
+			rooms: rooms(io),
+			sids: '1',
 		});
 	});
 	socket.on('sendMessage', (data) => {
 		// console.log(data);
 	});
+	// socket.on('get_rooms', function () {
+	// 	var room_list = {};
+
+	// 	// console.log(rooms);
+	// 	for (var room in io._nsps) {
+	// 		// if (!rooms[room].hasOwnProperty(room)) {
+	// 		// 	console.log(rooms[room]);
+	// 		// 	room_list[room] = Object.keys(
+	// 		// 		rooms[room]
+	// 		// 	).length;
+	// 		// }
+	// 		console.log(room);
+	// 	}
+	// 	console.log(room_list);
+	// 	socket.emit('rooms_list', room_list);
+	// });
 });
 
 server.listen(port, () => {

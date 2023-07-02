@@ -1,31 +1,22 @@
-const { readFile, writeFile } = require('fs');
-const pathtoJson = './rooms.json';
-const createRooms = (rooms) => {
-	console.log('Rooms create', rooms);
-	readFile(pathtoJson, (err, data) => {
-		if (err) {
-			console.log(err);
-		}
-		const parse = JSON.parse(data);
-		console.log('Parsing data ' + parse);
-		writeFile(
-			pathtoJson,
-			JSON.stringify(rooms),
-			(err) => {
-				if (err) {
-					console.log(err);
-				}
-			}
-		);
+const serialz = require('../serialz');
+module.exports = async (io) => {
+	const promises = [];
+	io._nsps.forEach(async (nsp) => {
+		const promise = nsp
+			.fetchSockets()
+			.then((sockets) => {
+				return sockets.map((socket) =>
+					serialz(socket, nsp.name)
+				);
+			});
+		console.log(promise);
+		return promises.push(promise);
 	});
-	// writeFile(
-	// 	pathtoJson,
-	// 	JSON.stringify(rooms),
-	// 	(err, result) => {
-	// 		if (err) {
-	// 			console.log(err);
-	// 		}
-	// 	}
-	// );
+	// console.log(io._nsps);
+	return (await Promise.all(promises)).reduce(
+		(acc, socket) => {
+			acc.push(...socket);
+			return acc;
+		}
+	);
 };
-module.exports = createRooms;
