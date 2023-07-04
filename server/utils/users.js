@@ -1,5 +1,5 @@
 const { writeFile, readFile } = require('fs');
-const pathtoJson = require('./users.json');
+const pathtoJson = require('./users/users.json');
 
 const createUser = (username, { socketId, room }) => {
 	const user = {

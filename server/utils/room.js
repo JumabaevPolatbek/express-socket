@@ -1,4 +1,4 @@
-const serialz = require('../serialz');
+const serialz = require('./serialz');
 module.exports = async (io) => {
 	const promises = [];
 	io._nsps.forEach(async (nsp) => {

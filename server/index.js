@@ -6,9 +6,9 @@ const http = require('http');
 const server = http.createServer(app);
 const cors = require('cors');
 const { Server } = require('socket.io');
-const createRooms = require('./utils/rooms/room');
+const createRooms = require('./utils/room');
 const serialz = require('./utils/serialz');
-const rooms = require('./utils/rooms/room');
+const rooms = require('./utils/room');
 const port = process.env.PORT || 5000;
 
 const io = new Server(server, {
@@ -26,6 +26,7 @@ app.use(
 	})
 );
 io.on('connect', async (socket) => {
+	const roomsClient = await rooms(io);
 	socket.on('join', ({ username, room }) => {
 		socket.join(room);
 		socket.emit('message', {
@@ -37,14 +38,13 @@ io.on('connect', async (socket) => {
 		});
 		socket.emit('server_stats', {
 			userId: socket.id,
-			rooms: rooms(io),
+			rooms: roomsClient[0].rooms,
 			sids: '1',
 		});
 	});
 	socket.on('sendMessage', (data) => {
 		// console.log(data);
 	});
-	
 });
 
 server.listen(port, () => {
