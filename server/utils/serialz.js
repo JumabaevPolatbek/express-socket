@@ -25,7 +25,6 @@ module.exports = (socket, nsp) => {
 			time: socket.handshake.time,
 			url: socket.handshake.url,
 			xdomain: socket.handshake.xdomain,
-			// ignore auth and other attributes like sessionStore
 		},
 		rooms: [...socket.rooms],
 	};

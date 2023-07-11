@@ -14,27 +14,17 @@ const Room = () => {
 	var room = state.room;
 	React.useEffect(() => {
 		socket.emit('join', state);
-		socket.emit('get_rooms', '');
 	}, [state]);
 	React.useEffect(() => {
 		socket.on('message', (message) => {
 			setData(message);
 		});
-		socket.on('server_stats', (servers) => {
-			console.log('Rooms', servers);
-		});
-		// socket.on('rooms_list', (data) => {
-		// 	console.log('Data', data);
-		// });
-		// socket.on('connection', (e) => {
-		// 	console.log(e);
-		// });
 	}, []);
 	const sendMessage = () => {
 		socket.emit('sendMessage', { message, room });
 		setMessage('');
 	};
-	console.log(socket);
+
 	return (
 		<div className='container mx-auto'>
 			<div className='flex flex-col'>

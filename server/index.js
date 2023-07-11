@@ -40,6 +40,7 @@ io.on('connect', async (socket) => {
 			userId: socket.id,
 			rooms: roomsClient[0].rooms,
 			sids: '1',
+			sockets: roomsClient[0].sockets,
 		});
 	});
 	socket.on('sendMessage', (data) => {

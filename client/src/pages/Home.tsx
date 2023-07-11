@@ -10,7 +10,11 @@ const Home = () => {
 				className='py-2 px-3 rounded-md border-blue-400 border'
 			/>
 			<Link
-				to={'/room'}
+				to={
+					name === 'admin'
+						? '/admin/clients'
+						: '/room'
+				}
 				state={{
 					username: name,
 					room: name,

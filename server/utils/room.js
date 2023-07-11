@@ -12,7 +12,6 @@ module.exports = async (io) => {
 		console.log(promise);
 		return promises.push(promise);
 	});
-	// console.log(io._nsps);
 	return (await Promise.all(promises)).reduce(
 		(acc, socket) => {
 			acc.push(...socket);
